@@ -120,11 +120,13 @@ class _ProfilScreenState extends State<ProfilScreen>
             onPressed: () async {
               // Action à effectuer lors du clic sur ce bouton
               await AuthService.logout();
-              // if (res.statusCode == 200) {
-              // pref.setString("token", "");
-              // pref.setString("role", "");
-              // controller.setToken("");
-              // controller.setRole("");
+
+              /*if (res.statusCode == 200) {
+               pref.setString("token", "");
+               pref.setString("role", "");
+               controller.setToken("");
+               controller.setRole(""); */
+
               Get.offAllNamed("/");
             },
           ),
@@ -206,7 +208,6 @@ class VerticalButton extends StatelessWidget {
     required this.title,
     this.onPressed,
   });
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(

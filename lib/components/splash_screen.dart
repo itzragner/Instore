@@ -33,7 +33,7 @@ var loggedIn = false;
     ).animate(_animationController);
 
     _animationController.forward().then(
-          (value) => Get.off(() => loggedIn ?  LoginInstaScreen() :const HomeView()),
+          (value) => Get.off(() => !loggedIn ?  LoginInstaScreen() :const HomeView()),
         );
   }
 
@@ -46,8 +46,10 @@ var loggedIn = false;
   isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     var  token  = prefs.getString("token");
+    print(token);
     loggedIn= (token != null) ? true: false;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

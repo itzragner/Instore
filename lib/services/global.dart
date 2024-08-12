@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instore/services/local_storage.dart';
 
-const String localhost = "192.168.1.22";
+const String localhost = "192.168.100.19";
 
 const String baseURL = "http://$localhost:8000/api/";
 const String frontOfiiceUrl = "http://localhost:4200/details/";

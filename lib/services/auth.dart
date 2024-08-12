@@ -1,7 +1,12 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:instore/services/global.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../components/login_instascreen.dart';
 
 final GlobalController controller = Get.find<GlobalController>();
 
@@ -21,7 +26,7 @@ class AuthService {
       "role": role,
     };
     var body = json.encode(data);
-    var url = Uri.parse('${{baseURL}}register');
+    var url = Uri.parse('${baseURL}register');
 
     http.Response response = await http.post(
       url,
@@ -112,7 +117,7 @@ class AuthService {
 
   static Future<http.Response> logout() async {
     var token = controller.token;
-    var url = Uri.parse('${{baseURL}}/logout');
+    var url = Uri.parse('${baseURL}logout');
     http.Response response = await http.post(
       url,
       headers: {
@@ -120,7 +125,14 @@ class AuthService {
         'Authorization': 'Bearer $token'
       },
     );
-    if (response.body.isNotEmpty) {}
+
+    if (response.statusCode == 200) {
+      final prefs = await SharedPreferences.getInstance();
+      prefs.clear();
+      controller.setToken("");
+      controller.setRole("");
+      Get.off(()=>LoginInstaScreen()) ;
+    }
     return response;
   }
 }

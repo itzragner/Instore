@@ -44,7 +44,7 @@ class AuthController {
 
   Future<void> registerAccountWithJson(
       Map<String, dynamic> jsonBody, File image) async {
-    var url = Uri.parse('http://192.168.100.30:8000/api/register');
+    var url = Uri.parse('http://192.168.100.19:8000/api/register');
 
     try {
       var request = http.MultipartRequest("POST", url);
@@ -84,7 +84,7 @@ class AuthController {
     required String companyName,
     required bool companyUnderConstruction,
   }) async {
-    var url = Uri.parse('http://192.168.100.30:8000/api/register');
+    var url = Uri.parse('http://192.168.100.19:8000/api/register');
     print('URL: $url'); // Affichage de l'URL dans le terminal
 
     try {
@@ -133,10 +133,11 @@ class AuthController {
     final dynamic email = emailController.text.trim();
     final dynamic password = passwordController.text.trim();
 
-    const String apiUrl = 'http://192.168.100.30:8000/api/login';
+    const String apiUrl = 'http://192.168.100.19:8000/api/';
+
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.100.30:8000/api/login'),
+        Uri.parse('${baseURL}login'),
         body: jsonEncode({'email': email, 'password': password}),
         headers: headers,
       );
