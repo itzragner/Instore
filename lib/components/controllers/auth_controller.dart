@@ -46,7 +46,7 @@ class AuthController {
 
   Future<void> registerAccountWithJson(
       Map<String, dynamic> jsonBody, File image) async {
-    var url = Uri.parse('http://192.168.100.19:8000/api/register');
+    var url = Uri.parse('${baseURL}register');
 
     try {
       var request = http.MultipartRequest("POST", url);
@@ -86,7 +86,7 @@ class AuthController {
     required String companyName,
     required bool companyUnderConstruction,
   }) async {
-    var url = Uri.parse('http://192.168.100.19:8000/api/register');
+    var url = Uri.parse('${baseURL}register');
     print('URL: $url'); // Affichage de l'URL dans le terminal
 
     try {
@@ -135,8 +135,6 @@ class AuthController {
     final dynamic email = emailController.text.trim();
     final dynamic password = passwordController.text.trim();
 
-    const String apiUrl = 'http://192.168.100.19:8000/api/';
-
     try {
       final response = await http.post(
         Uri.parse('${baseURL}login'),
@@ -156,7 +154,7 @@ class AuthController {
           _save(accessToken, user);
           isLoading.value = false;
           errorMessage.value = '';
-          Get.off(() => const HomeView());
+          Get.off(() =>  HomeView());
         } else {
           Get.snackbar("warn", "Your account is not active",
               backgroundColor: Colors.orange[300]);

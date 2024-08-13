@@ -28,7 +28,7 @@ class LocalStorageServices {
     settUser(newData);
   }
   */
-  settUser( Map<String, dynamic> user) async {
+  setUser( Map<String, dynamic> user) async {
     final prefs = await SharedPreferences.getInstance();
      prefs.setString("user",jsonEncode(user));
   }
@@ -39,4 +39,12 @@ class LocalStorageServices {
     final userData = user !=null ? jsonDecode(user) : null;
     return userData;
   }
+
+  getBrand() async {
+    final prefs = await SharedPreferences.getInstance();
+    final brand = prefs.getString("brand");
+    final brandData = brand !=null ? jsonDecode(brand) : null;
+    return brandData;
+  }
+
 }

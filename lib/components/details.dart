@@ -48,7 +48,7 @@ class _DetailsState extends State<Details> {
       (value) {
         if (value['status'] == 201) {
           Navigator.pop(context, 'Annuler');
-          Get.to(const HomeView());
+          Get.to( HomeView());
         }
       },
     );

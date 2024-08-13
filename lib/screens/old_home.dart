@@ -6,7 +6,7 @@ import 'package:instore/components/controllers/instagrameur.dart';
 import 'package:instore/components/details.dart';
 
 import 'messages_screen.dart';
-import '../components/produit.dart';
+import 'produit.dart';
 import 'profil_screen.dart';
 
 class HomeView extends StatefulWidget {

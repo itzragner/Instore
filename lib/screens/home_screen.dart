@@ -5,12 +5,13 @@ import 'package:get/get.dart';
 import 'package:instore/components/controllers/instagrameur.dart';
 import 'package:instore/components/details.dart';
 
+import '../services/local_storage.dart';
 import 'messages_screen.dart';
-import '../components/produit.dart';
+import 'produit.dart';
 import 'profil_screen.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+ const  HomeView({super.key});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -55,12 +56,22 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     },
   ];
 
+  //userdata
+  Map<String, dynamic>? userData;
+
   int _selectedIndex = 0;
   late FocusNode _searchFocusNode;
   late AnimationController _animationController;
   late Animation<double> _animation;
   bool _isMessageSelected = false;
   bool _isAccountSelected = false;
+ late List<dynamic> brandsList;
+  getBrands()async{
+  final res = await instaController.getBrands();
+  setState(() {
+    brandsList = res;
+  });
+}
 
   @override
   void initState() {
@@ -75,6 +86,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     );
     _animationController.forward();
     _searchFocusNode = FocusNode();
+    loadUserData();
+//   loadBrandData();
+    getBrands();
   }
 
   @override
@@ -94,7 +108,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeView()),
+          MaterialPageRoute(builder: (context) =>  HomeView()),
         );
         break;
       case 1:
@@ -117,6 +131,14 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         break;
     }
   }
+
+  Future<void> loadUserData() async {
+    final user = await LocalStorageServices().getUser();
+    setState(() {
+      userData = user;
+    });
+  }
+
 
   void _updateIconStates() {
     _isMessageSelected = _selectedIndex == 2;
@@ -144,9 +166,11 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                     MaterialPageRoute(builder: (context) => const ProfilScreen()),
                   );
                 },
-                child: const CircleAvatar(
+                child:  CircleAvatar(
                   radius: 20, // Ajustez la taille du cercle
-                  backgroundImage: AssetImage('assets/user.png'),
+                  backgroundImage: userData!['image'] != null
+                      ? NetworkImage(userData!['image'])
+                      : const AssetImage('assets/user.png') as ImageProvider,
                 ),
               )
             ],
@@ -459,7 +483,7 @@ class _ImageListViewState extends State<ImageListView> {
           shrinkWrap: true, // Make ListView wrap its content
           physics:
           const NeverScrollableScrollPhysics(), // Disable ListView scrolling
-          itemCount: _imageUrls.length,
+          itemCount: brandsList.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
@@ -510,7 +534,7 @@ class ImageContainer extends StatelessWidget {
         decoration: BoxDecoration(
           // borderRadius: BorderRadius.circular(2.0),
           image: DecorationImage(
-            image: AssetImage(imageUrl),
+            image: NetworkImage(imageUrl),
             fit: BoxFit.cover,
           ),
         ),

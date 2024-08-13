@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instore/components/produit.dart';
+import 'package:instore/screens/produit.dart';
 import 'package:instore/screens/profil_screen.dart';
 
 import '../screens/home_screen.dart';
@@ -52,7 +52,7 @@ class _BottomNavBarState extends State<BottomNavBar> with SingleTickerProviderSt
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeView()),
+          MaterialPageRoute(builder: (context) =>  HomeView()),
         );
         break;
       case 1:

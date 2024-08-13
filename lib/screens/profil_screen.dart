@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../services/auth.dart';
-import '../components/produit.dart';
+import 'produit.dart';
 import 'messages_screen.dart';
 import 'home_screen.dart';
-import '../utils/image_picker.dart';
+import '../widgets/image_picker.dart';
+import '../services/local_storage.dart';
+
 class ProfilScreen extends StatefulWidget {
   const ProfilScreen({super.key});
 
@@ -13,11 +15,16 @@ class ProfilScreen extends StatefulWidget {
   State<ProfilScreen> createState() => _ProfilScreenState();
 }
 
-class _ProfilScreenState extends State<ProfilScreen>
-    with SingleTickerProviderStateMixin {
+class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderStateMixin {
+
+
   int _selectedIndex = 3;
   late AnimationController _animationController;
   late Animation<double> _animation;
+
+  //userdata
+  Map<String, dynamic>? userData;
+
 
   @override
   void initState() {
@@ -31,6 +38,15 @@ class _ProfilScreenState extends State<ProfilScreen>
       curve: Curves.easeInOut,
     );
     _animationController.forward();
+
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    final user = await LocalStorageServices().getUser();
+    setState(() {
+      userData = user;
+    });
   }
 
   @override
@@ -48,7 +64,7 @@ class _ProfilScreenState extends State<ProfilScreen>
         case 0:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeView()),
+            MaterialPageRoute(builder: (context) =>  HomeView()),
           );
           break;
         case 1:
@@ -92,15 +108,11 @@ class _ProfilScreenState extends State<ProfilScreen>
             },
             child: Stack(
               children: [
-                const CircleAvatar(
+                 CircleAvatar(
                   radius: 100,
-                  backgroundImage: AssetImage('assets/user.png'),
-                  /*
-                  backgroundImage: userImageUrl != null
-                      ? NetworkImage(userImageUrl)
-                      : AssetImage('assets/user.png'),
-                   */
-
+                  backgroundImage: userData!['image'] != null
+                      ? NetworkImage(userData!['image'])
+                      : const AssetImage('assets/user.png') as ImageProvider,
                 ),
                 Positioned(
                   top: 0,
@@ -114,9 +126,9 @@ class _ProfilScreenState extends State<ProfilScreen>
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Hana Slouma',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          Text(
+            userData!['name'],
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           const Text(

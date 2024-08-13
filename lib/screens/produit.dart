@@ -7,9 +7,10 @@ import 'package:instore/components/details.dart';
 import 'package:instore/services/global.dart';
 
 import '../add_product_screen.dart';
-import '../screens/home_screen.dart' as home;
-import '../screens/messages_screen.dart';
-import '../screens/profil_screen.dart';
+import 'home_screen.dart' as home;
+import 'messages_screen.dart';
+import 'profil_screen.dart';
+import '../services/local_storage.dart';
 
 class InstagramProduit extends StatefulWidget {
   const InstagramProduit({super.key});
@@ -34,6 +35,9 @@ class _InstagramProduitState extends State<InstagramProduit>
 
   late List<Map<String, dynamic>> products = [];
 
+  Map<String, dynamic>? userData;
+
+
   int _selectedIndex = 1;
   late FocusNode _searchFocusNode;
   late AnimationController _animationController;
@@ -53,6 +57,8 @@ class _InstagramProduitState extends State<InstagramProduit>
     );
     _animationController.forward();
     _searchFocusNode = FocusNode();
+
+    loadUserData();
   }
 
   @override
@@ -142,7 +148,7 @@ class _InstagramProduitState extends State<InstagramProduit>
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const home.HomeView()),
+          MaterialPageRoute(builder: (context) =>  home.HomeView()),
         );
         break;
       case 1:
@@ -166,13 +172,19 @@ class _InstagramProduitState extends State<InstagramProduit>
     }
   }
 
+  Future<void> loadUserData() async {
+    final user = await LocalStorageServices().getUser();
+    setState(() {
+      userData = user;
+    });
+  }
   void _updateIconStates() {}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFFEF7FF),
         title: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
@@ -182,10 +194,20 @@ class _InstagramProduitState extends State<InstagramProduit>
                 'assets/instore.png',
                 height: 50,
               ),
-              const CircleAvatar(
-                radius: 20, // Ajustez la taille du cercle
-                backgroundImage: AssetImage('assets/marwa.jpg'),
-              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfilScreen()),
+                  );
+                },
+                child:  CircleAvatar(
+                  radius: 20, // Ajustez la taille du cercle
+                  backgroundImage: userData!['image'] != null
+                      ? NetworkImage(userData!['image'])
+                      : const AssetImage('assets/user.png') as ImageProvider,
+                ),
+              )
             ],
           ),
         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../components/produit.dart';
+import 'produit.dart';
 import 'home_screen.dart' as home;
 import 'profil_screen.dart';
 
@@ -45,7 +45,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
         case 0:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const home.HomeView()),
+            MaterialPageRoute(builder: (context) =>  home.HomeView()),
           );
           break;
         case 1:
