@@ -26,12 +26,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFffebf7),
+        backgroundColor: const Color(0xFFffebf7),
         elevation: 0,
         iconTheme: const IconThemeData(
           color: Colors.grey,
         ),
-        actions: [],
+        actions: const [],
         //       leading: IconButton(
         //   icon: Icon(Icons.arrow_back),
         //   onPressed: () {
@@ -68,7 +68,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
-                    border: Border.all(color: Color(0xFFFA058C), width: 2),
+                    border: Border.all(color: const Color(0xFFFA058C), width: 2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Padding(
@@ -95,23 +95,21 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ),
               ),
               const SizedBox(height: 20),
-              Container(
-                child: MaterialButton(
-                  elevation: 5,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0),
-                  ),
-                  color: Color(0xFFFA058C),
-                  onPressed: () {
-                    forgetPassword();
-                    Get.to(() => Code(), arguments: _email);
-                  },
-                  minWidth: 290,
-                  height: 45,
-                  child: Text(
-                    'Envoyer Email',
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
-                  ),
+              MaterialButton(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                color: const Color(0xFFFA058C),
+                onPressed: () {
+                  forgetPassword();
+                  Get.to(() => const Code(), arguments: _email);
+                },
+                minWidth: 290,
+                height: 45,
+                child: const Text(
+                  'Envoyer Email',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
               )
             ],

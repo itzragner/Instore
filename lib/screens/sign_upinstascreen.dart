@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instore/components/login_instascreen.dart';
-
+import 'package:instore/screens/login_instascreen.dart';
+import 'package:instore/utils/image_picker.dart';
 import '../components/controllers/Auth_controller.dart';
 
 class SignUpInstaScreen extends StatefulWidget {
@@ -20,13 +20,18 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
 
-  final TextEditingController _nomInstagrammeurController = TextEditingController();
+  final TextEditingController _nomInstagrammeurController =
+      TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _numeroTelephoneController = TextEditingController();
-  final TextEditingController _matriculeFiscaleController = TextEditingController();
-  final TextEditingController _lienInstagramController = TextEditingController();
+  final TextEditingController _numeroTelephoneController =
+      TextEditingController();
+  final TextEditingController _matriculeFiscaleController =
+      TextEditingController();
+  final TextEditingController _lienInstagramController =
+      TextEditingController();
   final TextEditingController _motDePasseController = TextEditingController();
-  final TextEditingController _confirmMotDePasseController = TextEditingController();
+  final TextEditingController _confirmMotDePasseController =
+      TextEditingController();
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postCodeController = TextEditingController();
@@ -67,16 +72,19 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
     });
   }
 
-  Future<void> _selectAndUploadImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    } else {}
+
+// ...
+
+Future<void> _selectAndUploadImage() async {
+  final selectedImage = await selectAndUploadImage();
+
+  if (selectedImage != null) {
+    setState(() {
+      _image = selectedImage;
+    });
   }
+}
 
   Future<void> _registerAccountWithImage() async {
     if (_formKey.currentState!.validate()) {
@@ -96,11 +104,11 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
         "companyUnderConstruction": _companyUnderConstruction ? 1 : 0,
       };
       _signUpController
-          .registerAccountWithJson(payload,_image)
+          .registerAccountWithJson(payload, _image)
           .then((response) {
         Get.snackbar("success", "register with success",
             colorText: Colors.green[600]);
-        Get.to(()=>LoginInstaScreen());
+        Get.to(() => LoginInstaScreen());
       }).catchError((error) {
         print('Erreur lors de la création du compte: $error');
       });
@@ -139,12 +147,12 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               CustomTextField(
                 controller: _nomInstagrammeurController,
                 labelText: 'Nom Instagrammeur',
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _numeroTelephoneController,
                 labelText: 'Numéro de téléphone',
@@ -153,7 +161,7 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 ],
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _cinController,
                 labelText: 'CIN',
@@ -171,7 +179,7 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _emailController,
                 labelText: 'Email',
@@ -188,48 +196,47 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _streetController,
                 labelText: 'Adresse',
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _cityController,
                 labelText: 'Ville',
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
-                controller: _postCodeController,
-                labelText: 'Code Postale',
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                ],
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Veuillez entrer votre code postale';
-                  }
-                  if (value.length < 4) {
-                    return 'Le code postale doit avoir au moins 4 chiffres';
-                  }
-                  return null;
-                }
-              ),
-              SizedBox(height: 10.0),
+                  controller: _postCodeController,
+                  labelText: 'Code Postale',
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Veuillez entrer votre code postale';
+                    }
+                    if (value.length < 4) {
+                      return 'Le code postale doit avoir au moins 4 chiffres';
+                    }
+                    return null;
+                  }),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _lienInstagramController,
                 labelText: 'Lien du compte Instagram',
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _companyNameController,
                 labelText: 'Nom de l\'entreprise',
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'L\'entreprise est en construction?',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -246,7 +253,7 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _motDePasseController,
                 labelText: 'Mot de passe',
@@ -267,7 +274,7 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               CustomTextField(
                 controller: _confirmMotDePasseController,
                 labelText: 'Confirmer le mot de passe',
@@ -288,12 +295,12 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
                   _registerAccountWithImage();
                 },
-                child: Text('Créer le compte'),
+                child: const Text('Créer le compte'),
               ),
             ],
           ),
@@ -313,6 +320,7 @@ class CustomTextField extends StatefulWidget {
   final Widget? suffixIcon;
 
   const CustomTextField({
+    super.key,
     required this.controller,
     required this.labelText,
     this.keyboardType,
@@ -336,23 +344,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: widget.obscureText,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        labelStyle: TextStyle(fontWeight: FontWeight.bold),
+        labelStyle: const TextStyle(fontWeight: FontWeight.bold),
         suffixIcon: widget.suffixIcon,
-        errorStyle: TextStyle(color: Colors.red),
+        errorStyle: const TextStyle(color: Colors.red),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
+          borderSide: const BorderSide(color: Colors.red),
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.red),
+          borderSide: const BorderSide(color: Colors.red),
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green),
+          borderSide: const BorderSide(color: Colors.green),
           borderRadius: BorderRadius.circular(10.0),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: Colors.grey),
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
@@ -362,7 +370,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: SignUpInstaScreen(),
   ));
 }

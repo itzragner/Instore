@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../components/produit.dart';
-import '../components/home_screen.dart' as home;
-import '../components/profil_screen.dart';
+import 'home_screen.dart' as home;
+import 'profil_screen.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({super.key});
@@ -44,25 +45,25 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
         case 0:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => home.HomeView()),
+            MaterialPageRoute(builder: (context) => const home.HomeView()),
           );
           break;
         case 1:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => InstagramProduit()),
+            MaterialPageRoute(builder: (context) => const InstagramProduit()),
           );
           break;
         case 2:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MessageScreen()),
+            MaterialPageRoute(builder: (context) => const MessageScreen()),
           );
           break;
         case 3:
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => ProfilScreen()),
+            MaterialPageRoute(builder: (context) => const ProfilScreen()),
           );
           break;
       }
@@ -73,7 +74,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Message'),
+        title: const Text('Message'),
       ),
       body: Column(
         children: [
@@ -95,59 +96,51 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
         animation: _animation,
         builder: (context, child) {
           return AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 100),
             transform: Matrix4.translationValues(
                 0.0, 50.0 * (1.0 - _animation.value), 0.0), // Move up and down
             child: AnimatedOpacity(
               opacity: _animation.value,
-              duration: Duration(milliseconds: 300),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                        color: Colors.black, width: 1.0), // Add top border
-                  ),
-                ),
-                child: BottomAppBar(
-                  child: Container(
-                    height: 50.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                          icon: _selectedIndex == 0
-                              ? Icon(Icons.home)
-                              : Icon(Icons.home_outlined),
-                          onPressed: () {
-                            _onItemTapped(0);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 1
-                              ? Icon(Icons.shopping_bag)
-                              : Icon(Icons.shopping_bag_outlined),
-                          onPressed: () {
-                            _onItemTapped(1);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 2
-                              ? Icon(Icons.message)
-                              : Icon(Icons.message_outlined),
-                          onPressed: () {
-                            _onItemTapped(2);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 3
-                              ? Icon(Icons.account_circle)
-                              : Icon(Icons.account_circle_outlined),
-                          onPressed: () {
-                            _onItemTapped(3);
-                          },
-                        ),
-                      ],
-                    ),
+              duration: const Duration(milliseconds: 50),
+              child: BottomAppBar(
+                height: 70,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: _selectedIndex == 0
+                            ? const FaIcon(FontAwesomeIcons.house, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.house,),
+                        onPressed: () {
+                          _onItemTapped(0);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 1
+                            ? const FaIcon(FontAwesomeIcons.bagShopping, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.bagShopping,),
+                        onPressed: () {
+                          _onItemTapped(1);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 2
+                            ?const FaIcon(FontAwesomeIcons.solidMessage, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.solidMessage),
+                        onPressed: () {
+                          _onItemTapped(2);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 3
+                            ?const FaIcon(FontAwesomeIcons.solidCircleUser, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.solidCircleUser),
+                        onPressed: () {
+                          _onItemTapped(3);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -160,10 +153,10 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
 
   Widget _buildMessageInput() {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Expanded(
+          const Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Type your message...',
@@ -172,7 +165,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
             onPressed: () {
               // Add your logic here for sending messages
             },
@@ -188,16 +181,16 @@ class MessageBubble extends StatelessWidget {
   final bool isMe;
   final Color color;
 
-  MessageBubble({required this.message, required this.isMe, required this.color});
+  MessageBubble({super.key, required this.message, required this.isMe, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
       child: Align(
         alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
         child: Container(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             color: isMe ? Colors.blue : color,
             borderRadius: BorderRadius.circular(10.0),

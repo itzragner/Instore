@@ -54,7 +54,7 @@ class _CodeState extends State<Code> {
               "success",
               response["response"]["message"],
               colorText: Colors.green.shade800);
-          Get.to(ChangePassword(), arguments: email);
+          Get.to(const ChangePassword(), arguments: email);
           // print(response["response"]["message"]);
         } else {
           Get.snackbar(
@@ -85,7 +85,7 @@ class _CodeState extends State<Code> {
       height: 2000,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xFFffebf7),
+          backgroundColor: const Color(0xFFffebf7),
           elevation: 0,
           iconTheme: const IconThemeData(
             color: Colors.grey,
@@ -103,8 +103,8 @@ class _CodeState extends State<Code> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text("Verification CODE",
-                    style: const TextStyle(
+                const Text("Verification CODE",
+                    style: TextStyle(
                         fontSize: 40, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 20),
                 const Text(
@@ -121,18 +121,18 @@ class _CodeState extends State<Code> {
                 const SizedBox(height: 20),
                 MaterialButton(
                   elevation: 5,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  color: Color(0xFFFA058C),
+                  color: const Color(0xFFFA058C),
                   onPressed: () {
                         verifCode();
                   },
                   minWidth: 290,
                   height: 45,
-                  child: Text(
+                  child: const Text(
                     'Envoyer Code',
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 const SizedBox(height: 10),

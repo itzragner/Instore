@@ -24,7 +24,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: kToolbarHeight + 60), // Adjusted margin
+      margin: const EdgeInsets.only(top: kToolbarHeight + 60), // Adjusted margin
       color: Colors.transparent,
       height: 40.0,
       child: ListView.builder(
@@ -32,7 +32,7 @@ class CategoryWidget extends StatelessWidget {
         itemCount: categories.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 3.0),
+            padding: const EdgeInsets.symmetric(horizontal: 3.0),
             child: Container(
               decoration: BoxDecoration(
                 color: categories[index].color.withOpacity(0.2),
@@ -44,14 +44,14 @@ class CategoryWidget extends StatelessWidget {
                   onCategoryTap(index);
                 },
                 child: Padding(
-                  padding: EdgeInsets.all(9.0),
+                  padding: const EdgeInsets.all(9.0),
                   child: Row(
                     children: [
                       Icon(categories[index].icon, size: 18),
-                      SizedBox(width: 5),
+                      const SizedBox(width: 5),
                       Text(
                         categories[index].name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,

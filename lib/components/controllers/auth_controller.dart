@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:instore/components/home_screen.dart';
+import 'package:instore/screens/home_screen.dart';
 import 'package:instore/services/auth.dart';
 import 'package:instore/services/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +40,8 @@ class AuthController {
   _save(String token, Map<String, dynamic> user) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("token", token);
+    prefs.setString("user",jsonEncode(user));
+
   }
 
   Future<void> registerAccountWithJson(
@@ -145,17 +147,16 @@ class AuthController {
 
       if (response.statusCode == 200) {
         Map responseMap = jsonDecode(response.body);
-
         final responseStatus = responseMap['status'];
         if (responseStatus != 401) {
-          String token = responseMap['token'];
-          print("token ==  ${token}");
+          String accessToken = responseMap['access_token'];
+          String refreshToken = responseMap['refresh_token'];
           Map<String, dynamic> user = responseMap['user'];
-          controller.setToken(token);
-          _save(token, user);
+          controller.setToken(accessToken);
+          _save(accessToken, user);
           isLoading.value = false;
           errorMessage.value = '';
-          Get.off(() => HomeView());
+          Get.off(() => const HomeView());
         } else {
           Get.snackbar("warn", "Your account is not active",
               backgroundColor: Colors.orange[300]);

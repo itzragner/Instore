@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:instore/services/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../components/login_instascreen.dart';
+import '../screens/login_instascreen.dart';
 
 final GlobalController controller = Get.find<GlobalController>();
 

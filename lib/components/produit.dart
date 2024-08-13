@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:instore/components/controllers/instagrameur.dart';
 import 'package:instore/components/details.dart';
 import 'package:instore/services/global.dart';
 
-import '../components/add_product_screen.dart';
-import '../components/home_screen.dart' as home;
-import '../components/messages_screen.dart';
-import '../components/profil_screen.dart';
+import '../add_product_screen.dart';
+import '../screens/home_screen.dart' as home;
+import '../screens/messages_screen.dart';
+import '../screens/profil_screen.dart';
 
 class InstagramProduit extends StatefulWidget {
   const InstagramProduit({super.key});
@@ -33,7 +34,7 @@ class _InstagramProduitState extends State<InstagramProduit>
 
   late List<Map<String, dynamic>> products = [];
 
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
   late FocusNode _searchFocusNode;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -190,6 +191,8 @@ class _InstagramProduitState extends State<InstagramProduit>
         ),
       ),
       body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
         child: isLoading
             ? const Center(child: CircularProgressIndicator())
             : Container(
@@ -212,6 +215,7 @@ class _InstagramProduitState extends State<InstagramProduit>
                 ),
               ),
       ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -233,58 +237,51 @@ class _InstagramProduitState extends State<InstagramProduit>
         animation: _animation,
         builder: (context, child) {
           return AnimatedContainer(
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 100),
             transform: Matrix4.translationValues(
                 0.0, 50.0 * (1.0 - _animation.value), 0.0), // Move up and down
             child: AnimatedOpacity(
               opacity: _animation.value,
-              duration: const Duration(milliseconds: 500),
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          color: Colors.black, width: 1.0)), // Add top border
-                ),
-                child: BottomAppBar(
-                  child: SizedBox(
-                    height: 50.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                          icon: _selectedIndex == 0
-                              ? const Icon(Icons.home_outlined)
-                              : const Icon(Icons.home_outlined),
-                          onPressed: () {
-                            _onItemTapped(0);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 1
-                              ? const Icon(Icons.shopping_bag)
-                              : const Icon(Icons.shopping_bag),
-                          onPressed: () {
-                            _onItemTapped(1);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 2
-                              ? const Icon(Icons.message)
-                              : const Icon(Icons.message_outlined),
-                          onPressed: () {
-                            _onItemTapped(2);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 3
-                              ? const Icon(Icons.account_circle)
-                              : const Icon(Icons.account_circle_outlined),
-                          onPressed: () {
-                            _onItemTapped(3);
-                          },
-                        ),
-                      ],
-                    ),
+              duration: const Duration(milliseconds: 50),
+              child: BottomAppBar(
+                height: 70,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: _selectedIndex == 0
+                            ? const FaIcon(FontAwesomeIcons.house, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.house,),
+                        onPressed: () {
+                          _onItemTapped(0);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 1
+                            ? const FaIcon(FontAwesomeIcons.bagShopping, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.bagShopping,),
+                        onPressed: () {
+                          _onItemTapped(1);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 2
+                            ?const FaIcon(FontAwesomeIcons.solidMessage, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.solidMessage),
+                        onPressed: () {
+                          _onItemTapped(2);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 3
+                            ?const FaIcon(FontAwesomeIcons.solidCircleUser, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.solidCircleUser),
+                        onPressed: () {
+                          _onItemTapped(3);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),

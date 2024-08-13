@@ -19,7 +19,7 @@ class ImageSlider extends StatelessWidget {
         itemBuilder: (context, index) {
           return Hero(
             tag: image,
-            child: Container(
+            child: SizedBox(
               width:double.infinity,
               child: Image.asset(image)),
           );

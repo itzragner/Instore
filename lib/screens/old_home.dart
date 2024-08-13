@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:instore/components/controllers/instagrameur.dart';
 import 'package:instore/components/details.dart';
 
-import '../components/messages_screen.dart';
+import 'messages_screen.dart';
 import '../components/produit.dart';
-import '../components/profil_screen.dart';
-
+import 'profil_screen.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -19,7 +19,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   InstagrameurController instaController = Get.find<InstagrameurController>();
-
+  int _selectedCategoryIndex = 0;
   final List<String> names = <String>[
     'Vetement',
     'Sport',
@@ -126,7 +126,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFEF7FF),
+        backgroundColor: const Color(0xFFFEF7FF),
         title: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
@@ -136,55 +136,62 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                 'assets/instore.png',
                 height: 50,
               ),
-              const CircleAvatar(
-                radius: 20, // Ajustez la taille du cercle
-                backgroundImage: AssetImage('assets/user.png'),
-              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfilScreen()),
+                  );
+                },
+                child: const CircleAvatar(
+                  radius: 20, // Ajustez la taille du cercle
+                  backgroundImage: AssetImage('assets/user.png'),
+                ),
+              )
             ],
           ),
         ),
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(top: 10, left: 0, right: 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-        Padding(
-        padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                _searchTextFormField(),
-                const SizedBox(height: 10),
-                _listViewCategory(),
-                const SizedBox(height: 10),
-              ],
-            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _searchTextFormField(),
+                  const SizedBox(height: 10),
+                  _listViewCategory(),
+                  const SizedBox(height: 10),
+                ],
+              ),
 
-        ),
+            ),
             ImageListView(),
             const SizedBox(height: 20),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
             const SizedBox(height: 20),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
             const SizedBox(height: 20),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding:  EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
             const SizedBox(height: 20),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding:  EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
 
@@ -205,46 +212,45 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             child: AnimatedOpacity(
               opacity: _animation.value,
               duration: const Duration(milliseconds: 50),
-              child: Container(
-                child: BottomAppBar(
-                  child: SizedBox(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButton(
-                          icon: _selectedIndex == 0
-                              ? const Icon(Icons.home)
-                              : const Icon(Icons.home_outlined),
-                          onPressed: () {
-                            _onItemTapped(0);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 1
-                              ? const Icon(Icons.shopping_bag)
-                              : const Icon(Icons.shopping_bag_outlined),
-                          onPressed: () {
-                            _onItemTapped(1);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 2
-                              ? const Icon(Icons.message)
-                              : const Icon(Icons.message_outlined),
-                          onPressed: () {
-                            _onItemTapped(2);
-                          },
-                        ),
-                        IconButton(
-                          icon: _selectedIndex == 3
-                              ? const Icon(Icons.account_circle)
-                              : const Icon(Icons.account_circle_outlined),
-                          onPressed: () {
-                            _onItemTapped(3);
-                          },
-                        ),
-                      ],
-                    ),
+              child: BottomAppBar(
+                height: 70,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: _selectedIndex == 0
+                            ? const FaIcon(FontAwesomeIcons.house, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.house,),
+                        onPressed: () {
+                          _onItemTapped(0);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 1
+                            ? const FaIcon(FontAwesomeIcons.bagShopping, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.bagShopping,),
+                        onPressed: () {
+                          _onItemTapped(1);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 2
+                            ?const FaIcon(FontAwesomeIcons.solidMessage, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.solidMessage),
+                        onPressed: () {
+                          _onItemTapped(2);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 3
+                            ?const FaIcon(FontAwesomeIcons.solidCircleUser, color: Color(0xFFFA058C),)
+                            : const FaIcon(FontAwesomeIcons.solidCircleUser),
+                        onPressed: () {
+                          _onItemTapped(3);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -273,7 +279,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
               color: Color(0xFFBBBBBB),
             ),
             hintText: 'Rechercher sur Instore',
-            hintStyle: TextStyle(color: Color(0xFFBBBBBB),),
+            hintStyle: TextStyle(color: Color(0xFFBBBBBB)),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           ),
         ),
       ),
@@ -384,73 +391,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
 }
 
-
-/*class ImageGrid extends StatefulWidget {
-  @override
-  _ImageGridState createState() => _ImageGridState();
-}*/
-
-/*
-class _ImageGridState extends State<ImageGrid> {
-  List<String> _images = [
-    'assets/image1.jpg',
-    'assets/image2.jpeg',
-    'assets/image3.jpg',
-    'assets/image4.jpg',
-    'assets/image5.jpg',
-    'assets/image1.jpg',
-    'assets/image2.jpeg',
-    'assets/image3.jpg',
-    'assets/image4.jpg',
-    'assets/image5.jpg',
-  ];
-
-  int _itemsPerPage = 3;
-  int _currentPage = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: _itemsPerPage * (_currentPage + 1),
-            itemBuilder: (context, index) {
-              if (index < _images.length) {
-                return Image.asset(
-                  _images[index],
-                  fit: BoxFit.cover,
-                );
-              } else {
-              return Container(); // Return an empty container if index exceeds the list length
-              }
-            },
-          ),
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              if ((_currentPage + 1) * _itemsPerPage < _images.length) {
-              _currentPage++;
-              }
-            });
-          },
-          child: Text('Voir plus'),
-        ),
-      ],
-    );
-  }
-}
-*/
-
-
 class ImageListView extends StatefulWidget {
   @override
   _ImageListViewState createState() => _ImageListViewState();
@@ -477,7 +417,7 @@ class _ImageListViewState extends State<ImageListView> {
     });
 
     // Simulate a backend call with a delay
-    await Future.delayed(Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 50));
 
     // Simulate fetched items from backend
     List<String> fetchedItems = List.generate(
@@ -504,7 +444,7 @@ class _ImageListViewState extends State<ImageListView> {
       children: [
         ListView.builder(
           shrinkWrap: true, // Make ListView wrap its content
-          physics: NeverScrollableScrollPhysics(), // Disable ListView scrolling
+          physics: const NeverScrollableScrollPhysics(), // Disable ListView scrolling
           itemCount: _imageUrls.length,
           itemBuilder: (context, index) {
             return Padding(
@@ -516,13 +456,13 @@ class _ImageListViewState extends State<ImageListView> {
         if (_hasMore && !_isLoading)
           ElevatedButton(
             onPressed: _loadMoreItems,
-            child: Center(
+            child: const Center(
               child: Text('Show More'),
             ),
           ),
         if (_isLoading)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Center(child: CircularProgressIndicator()),
           ),
       ],
@@ -541,12 +481,12 @@ class ImageContainer extends StatelessWidget {
     return Container(
       width: deviceWidth,
       height: 150,
-      decoration: new BoxDecoration(
-    image: DecorationImage(
-    image: new AssetImage(imageUrl),
-    fit: BoxFit.fill,
-    ),
-    ),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(imageUrl),
+          fit: BoxFit.fill,
+        ),
+      ),
     );
   }
 }

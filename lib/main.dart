@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instore/components/controllers/instagrameur.dart';
 import 'package:instore/services/global.dart';
-import 'components/splash_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   Get.put(GlobalController());

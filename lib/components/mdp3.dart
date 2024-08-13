@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:instore/components/login_instascreen.dart';
+import 'package:instore/screens/login_instascreen.dart';
 // import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 // import 'package:saverapp/Screens/login.dart';
@@ -54,7 +54,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         SnackBar(
           content: Text(
             errorMessage,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
           backgroundColor: Colors.red,
         ),
@@ -67,14 +67,14 @@ class _ChangePasswordState extends State<ChangePassword> {
     // final String email = Get.arguments;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color(0xFFffebf7),
+          backgroundColor: const Color(0xFFffebf7),
           elevation: 0,
           iconTheme: const IconThemeData(
             color: Colors.grey,
           ),
           actions: [],
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -88,8 +88,8 @@ class _ChangePasswordState extends State<ChangePassword> {
             children: [
               //change password
               const SizedBox(height: 100),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
+              const Padding(
+                padding: EdgeInsets.only(left: 20),
                 child: Text(
                   "Changer Mot De Passe",
                   style: TextStyle(
@@ -141,10 +141,10 @@ class _ChangePasswordState extends State<ChangePassword> {
               Center(
                 child: MaterialButton(
                   elevation: 5,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(10.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  color: Color(0xFFFA058C),
+                  color: const Color(0xFFFA058C),
                   onPressed: () {
                      updatePassword();
                     Navigator.push(
@@ -155,9 +155,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                   },
                   minWidth: 200,
                   height: 45,
-                  child: Text(
+                  child: const Text(
                     'Confirmer ',
-                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
               ),

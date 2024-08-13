@@ -13,7 +13,7 @@ class _SplashhScreenState extends State<SplashhScreen> {
   @override
   void initState() {
     Timer(
-        Duration(
+        const Duration(
           seconds: 60,
         ), () async {
       // FirebaseAuth.instance.authStateChanges().listen((User? user) {
@@ -39,7 +39,7 @@ class _SplashhScreenState extends State<SplashhScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFffebf7),
+      backgroundColor: const Color(0xFFffebf7),
       body: Center(
         child: Image.asset(
           'assets/instore.png',

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../components/category.dart';
-import '../models/product_model.dart' as ProductModel;
+import 'components/category.dart';
+import 'models/product_model.dart' as ProductModel;
 
 class AddProductScreen extends StatefulWidget {
   // final List<Brand> brands;

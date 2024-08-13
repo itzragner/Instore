@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instore/components/controllers/instagrameur.dart';
-import 'package:instore/components/home_screen.dart';
+import 'package:instore/screens/home_screen.dart';
 
 class Details extends StatefulWidget {
   const Details({super.key});

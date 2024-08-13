@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:instore/components/home_screen.dart';
-import '../components/login_instascreen.dart';
+import 'package:instore/screens/home_screen.dart';
+import 'login_instascreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -46,7 +46,6 @@ var loggedIn = false;
   isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     var  token  = prefs.getString("token");
-    print(token);
     loggedIn= (token != null) ? true: false;
   }
 
@@ -69,7 +68,7 @@ var loggedIn = false;
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    margin: EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                         top:
                             120), // Ajout de la marge supérieure pour le premier Image
                     child: Image.asset(
@@ -80,10 +79,10 @@ var loggedIn = false;
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.only(
+                    margin: const EdgeInsets.only(
                         top:
                             60), // Ajout de la marge supérieure pour le CircularProgressIndicator
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                           Color.fromARGB(255, 9, 220, 216)),
                     ),

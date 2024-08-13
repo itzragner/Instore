@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:instore/components/controllers/auth_controller.dart';
 import 'package:instore/services/global.dart';
 import '../components/mdp1.dart';
-import '../components/sign_upinstascreen.dart';
+import 'sign_upinstascreen.dart';
 
 class LoginInstaScreen extends StatelessWidget {
   final AuthController authController = AuthController();
@@ -142,7 +142,7 @@ class LoginInstaScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    Get.to(() => SignUpInstaScreen());
+                    Get.to(() => const SignUpInstaScreen());
                   },
                   child: const Text(
                     'Créer un compte',

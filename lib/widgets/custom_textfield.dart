@@ -14,13 +14,13 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(
-          suffixIcon: Icon(
+          suffixIcon: const Icon(
             Icons.check,
             color: Colors.grey,
           ),
           label: Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: Color(0xffB81736),
             ),

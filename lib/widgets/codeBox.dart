@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show BorderRadius, BuildContext, Colors, Container, EdgeInsets, FocusNode, InputBorder, InputDecoration, Key, Material, Matrix4, StatelessWidget, TextField, Widget;
 
 class CodeBox extends StatelessWidget {
   final int moveCount;

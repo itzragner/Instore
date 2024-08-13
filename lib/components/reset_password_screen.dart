@@ -7,23 +7,23 @@ class ResetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Réinitialisation du mot de passe'),
+        title: const Text('Réinitialisation du mot de passe'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
-              decoration: InputDecoration(labelText: 'Adresse e-mail'),
+              decoration: const InputDecoration(labelText: 'Adresse e-mail'),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                Get.to(() => VerificationCodeScreen());
+                Get.to(() => const VerificationCodeScreen());
               },
-              child: Text('Envoyer'),
+              child: const Text('Envoyer'),
             ),
           ],
         ),
