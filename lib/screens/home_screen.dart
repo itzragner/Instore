@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:instore/components/controllers/instagrameur.dart';
+import 'package:instore/services/instagrameur.dart';
 import 'package:instore/components/details.dart';
 
 import '../services/local_storage.dart';
@@ -516,8 +516,7 @@ class _ImageListViewState extends State<ImageListView> {
 class ImageContainer extends StatelessWidget {
   final String imageUrl;
 
-  const ImageContainer({required this.imageUrl});
-
+  const ImageContainer({super.key, required this.imageUrl});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -546,7 +545,7 @@ class ImageContainer extends StatelessWidget {
 class DetailScreen extends StatelessWidget {
   final String imageUrl;
 
-  const DetailScreen({required this.imageUrl});
+  const DetailScreen({super.key, required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -557,7 +556,7 @@ class DetailScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Image.asset(imageUrl),
+            child: Image.network(imageUrl),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),

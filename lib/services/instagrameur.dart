@@ -114,6 +114,7 @@ class InstagrameurController extends GetxController {
       throw Exception('Failed to load data');
     }
   }
+
   Future getBrands() async {
     var header = {
       'Content-Type': 'application/json',

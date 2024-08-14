@@ -33,7 +33,7 @@ var loggedIn = false;
     ).animate(_animationController);
 
     _animationController.forward().then(
-          (value) => Get.off(() => !loggedIn ?  LoginInstaScreen() : HomeView()),
+          (value) => Get.off(() => !loggedIn ?  LoginInstaScreen() : const HomeView()),
         );
   }
 

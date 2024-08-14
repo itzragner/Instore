@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:instore/components/controllers/instagrameur.dart';
+import 'package:instore/services/instagrameur.dart';
 import 'package:instore/screens/home_screen.dart';
 
 class Details extends StatefulWidget {
