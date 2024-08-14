@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import '../services/auth.dart';
-import 'produit.dart';
+import 'product_screen.dart';
 import 'messages_screen.dart';
 import 'home_screen.dart';
 import '../widgets/image_picker.dart';

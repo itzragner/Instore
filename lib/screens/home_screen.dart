@@ -7,7 +7,7 @@ import 'package:instore/components/details.dart';
 
 import '../services/local_storage.dart';
 import 'messages_screen.dart';
-import 'produit.dart';
+import 'product_screen.dart';
 import 'profil_screen.dart';
 
 class HomeView extends StatefulWidget {
@@ -65,13 +65,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   late Animation<double> _animation;
   bool _isMessageSelected = false;
   bool _isAccountSelected = false;
- late List<dynamic> brandsList;
-  getBrands()async{
-  final res = await instaController.getBrands();
-  setState(() {
-    brandsList = res;
-  });
-}
+
 
   @override
   void initState() {
@@ -88,7 +82,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     _searchFocusNode = FocusNode();
     loadUserData();
 //   loadBrandData();
-    getBrands();
+
   }
 
   @override
@@ -108,7 +102,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  HomeView()),
+          MaterialPageRoute(builder: (context) =>  const HomeView()),
         );
         break;
       case 1:
@@ -195,23 +189,23 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
             ),
             ImageListView(),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
               child: Text('Other Content Below the List'),
             ),
           ],
@@ -425,7 +419,8 @@ class ImageListView extends StatefulWidget {
 }
 
 class _ImageListViewState extends State<ImageListView> {
-  List<String> _imageUrls = [];
+  InstagrameurController instaController = Get.find<InstagrameurController>();
+  List<dynamic> brandsList = [];
   int _currentPage = 0;
   final int _itemsPerPage = 3;
   bool _isLoading = false;
@@ -436,39 +431,45 @@ class _ImageListViewState extends State<ImageListView> {
   void initState() {
     super.initState();
     _loadMoreItems();
+    getBrands();
+  }
+
+  Future<void> getBrands() async {
+    final res = await instaController.getBrands();
+    setState(() {
+      brandsList = res;
+      _hasMore = brandsList.length > _itemsPerPage;
+      _loadMoreItems();  // Load the first set of items once the data is fetched
+    });
   }
 
   Future<void> _loadMoreItems() async {
-    if (_isLoading) return;
+    if (_isLoading || !_hasMore) return;
 
     setState(() {
       _isLoading = true;
-      _isFirstLoad = false; // Après le premier clic, ceci devient faux
+      _isFirstLoad = false;
     });
 
-    // Simulate a backend call with a delay
     await Future.delayed(const Duration(milliseconds: 50));
 
-    // Simulate fetched items from backend
-    List<String> fetchedItems = List.generate(
-      _itemsPerPage,
-          (index) => 'assets/image${_currentPage * _itemsPerPage + index}.jpg',
-    );
-
-    // Check if we fetched less than the requested number of items
-    if (fetchedItems.length < _itemsPerPage) {
-      _hasMore = false;
+    if (_currentPage * _itemsPerPage < brandsList.length) {
+      setState(() {
+        _currentPage++;
+        _isLoading = false;
+        _hasMore = _currentPage * _itemsPerPage < brandsList.length;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+        _hasMore = false;
+      });
     }
-
-    setState(() {
-      _imageUrls.addAll(fetchedItems);
-      _currentPage++;
-      _isLoading = false;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    int itemCount = (_currentPage * _itemsPerPage).clamp(0, brandsList.length);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -480,14 +481,13 @@ class _ImageListViewState extends State<ImageListView> {
             ),
           ),
         ListView.builder(
-          shrinkWrap: true, // Make ListView wrap its content
-          physics:
-          const NeverScrollableScrollPhysics(), // Disable ListView scrolling
-          itemCount: brandsList.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: itemCount,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: ImageContainer(imageUrl: _imageUrls[index]),
+              child: ImageContainer(imageUrl: brandsList[index]['image']),
             );
           },
         ),
@@ -532,7 +532,6 @@ class ImageContainer extends StatelessWidget {
         width: double.infinity,
         height: 130,
         decoration: BoxDecoration(
-          // borderRadius: BorderRadius.circular(2.0),
           image: DecorationImage(
             image: NetworkImage(imageUrl),
             fit: BoxFit.cover,
@@ -542,6 +541,7 @@ class ImageContainer extends StatelessWidget {
     );
   }
 }
+
 
 class DetailScreen extends StatelessWidget {
   final String imageUrl;

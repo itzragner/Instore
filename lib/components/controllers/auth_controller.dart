@@ -154,7 +154,7 @@ class AuthController {
           _save(accessToken, user);
           isLoading.value = false;
           errorMessage.value = '';
-          Get.off(() =>  HomeView());
+          Get.off(() =>  const HomeView());
         } else {
           Get.snackbar("warn", "Your account is not active",
               backgroundColor: Colors.orange[300]);

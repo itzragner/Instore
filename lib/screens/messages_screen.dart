@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'produit.dart';
+import 'product_screen.dart';
 import 'home_screen.dart' as home;
 import 'profil_screen.dart';
 
