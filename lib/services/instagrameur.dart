@@ -130,12 +130,34 @@ class InstagrameurController extends GetxController {
         var res = json.decode(response.body);
         return res;
       } else {
-        throw Exception('Failed to load data');
+        throw Exception('Failed to load data brands');
       }
     } catch (e) {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to load data brands 2');
     }
   }
+
+  Future getCategories() async {
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${controller.token}',
+    };
+    try {
+      final response = await http.get(
+        Uri.parse('${baseURL}categories'),
+        headers: header,
+      );
+
+      if (response.statusCode == 200) {
+        var res = json.decode(response.body);
+        return res;
+      } else {
+        throw Exception('Failed to load data categories');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data categories 2');
+    }
+}
 }
 
 
