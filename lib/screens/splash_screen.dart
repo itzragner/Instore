@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instore/screens/home_screen.dart';
@@ -12,13 +11,13 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+
   late AnimationController _animationController;
   late Animation<double> _fadeInAnimation;
-var loggedIn = false;
-  @override
+  var loggedIn = false;
 
+  @override
   void initState() {
     super.initState();
     isLoggedIn();
@@ -33,7 +32,8 @@ var loggedIn = false;
     ).animate(_animationController);
 
     _animationController.forward().then(
-          (value) => Get.off(() => !loggedIn ?  LoginInstaScreen() : const HomeView()),
+          (value) =>
+              Get.off(() => !loggedIn ? LoginInstaScreen() : const HomeView()),
         );
   }
 
@@ -45,8 +45,8 @@ var loggedIn = false;
 
   isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
-    var  token  = prefs.getString("token");
-    loggedIn= (token != null) ? true: false;
+    var token = prefs.getString("token");
+    loggedIn = (token != null) ? true : false;
   }
 
   @override

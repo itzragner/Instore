@@ -420,3 +420,142 @@ class _InstagramProduitState extends State<InstagramProduit>
     );
   }
 }
+
+
+
+
+
+
+//clipRRect for products
+
+/*
+
+class ImageListView extends StatelessWidget {
+  final List<dynamic> filteredBrandsList;
+
+  const ImageListView({super.key, required this.filteredBrandsList});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: filteredBrandsList.length,
+      itemBuilder: (context, index) {
+        final brand = filteredBrandsList[index];
+        final imageUrl = brand['imageUrl'] ?? 'https://via.placeholder.com/150'; // Placeholder for missing image
+        final name = brand['name'] ?? 'Unknown Brand';
+        final description = brand['description'] ?? 'No description available';
+
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailScreen(brand: brand),
+              ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    imageUrl,
+                    height: 80,
+                    width: 80,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      description,
+                      style: const TextStyle(fontSize: 14),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  final dynamic brand;
+
+  const DetailScreen({super.key, required this.brand});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          brand['name'] ?? 'Brand Name Unavailable',
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: brand['imageUrl'] != null
+                ? Image.network(brand['imageUrl'])
+                : Image.asset('assets/placeholder_image.png'), // Placeholder image
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(
+                  brand['name'] ?? 'Product Name Unavailable',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  brand['price']?.toString() ?? 'Price Unavailable',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  brand['description'] ?? 'Description Unavailable',
+                  textAlign: TextAlign.justify,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+} */
+
+

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatefulWidget {
   //final Product product;
-  const DetailsScreen({
+   DetailsScreen({
     super.key,
     //required this.product
+
   });
 
   @override

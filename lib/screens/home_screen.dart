@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:instore/components/details_sreen.dart';
 import 'package:instore/services/instagrameur.dart';
 import 'package:instore/components/details.dart';
 
@@ -11,7 +11,7 @@ import 'product_screen.dart';
 import 'profil_screen.dart';
 
 class HomeView extends StatefulWidget {
- const  HomeView({super.key});
+  const HomeView({super.key});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -19,44 +19,12 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   InstagrameurController instaController = Get.find<InstagrameurController>();
-  int _selectedCategoryIndex = 0; // Variable pour l'index de la catégorie sélectionnée
+  int _selectedCategoryIndex = 0;
+  List<dynamic> categoriesList = [];
+  List<dynamic> brandsList = [];
+  List<dynamic> filteredBrandsList = [];
 
-  //list category
-  final List<String> names = <String>[
-    'Vetement',
-    'Sport',
-    'Electronic',
-    'Maison',
-    'Accesoire',
-    'Beauté',
-    'Animaux',
-  ];
-
-  //list product
-  final List<Map<String, String>> products = [
-    {
-      'name': 'Pull',
-      'price': '90DT',
-      'image': 'assets/YELLOW.png',
-    },
-    {
-      'name': 'Chemise',
-      'price': '100DT',
-      'image': 'assets/chemise2.jpg',
-    },
-    {
-      'name': 'Cargo',
-      'price': '150DT',
-      'image': 'assets/kargou.jpg',
-    },
-    {
-      'name': 'Trenche',
-      'price': '250DT',
-      'image': 'assets/trenchesW.jpg',
-    },
-  ];
-
-  //userdata
+  // User data
   Map<String, dynamic>? userData;
 
   int _selectedIndex = 0;
@@ -65,7 +33,6 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   late Animation<double> _animation;
   bool _isMessageSelected = false;
   bool _isAccountSelected = false;
-
 
   @override
   void initState() {
@@ -81,8 +48,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     _animationController.forward();
     _searchFocusNode = FocusNode();
     loadUserData();
-//   loadBrandData();
-
+    getCategories();
+    getBrands();
   }
 
   @override
@@ -91,6 +58,44 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     _searchFocusNode.dispose();
     super.dispose();
   }
+
+  Future<void> loadUserData() async {
+    final user = await LocalStorageServices().getUser();
+    setState(() {
+      userData = user;
+    });
+  }
+
+  Future<void> getCategories() async {
+    final res = await instaController.getCategories();
+    setState(() {
+      categoriesList = res;
+    });
+  }
+
+  Future<void> getBrands() async {
+    final res = await instaController.getBrands();
+    setState(() {
+      brandsList = res;
+      _filterBrandsByCategory();
+    });
+  }
+
+  void _filterBrandsByCategory() {
+    if (_selectedCategoryIndex < categoriesList.length) {
+      final selectedCategory = categoriesList[_selectedCategoryIndex];
+
+      if (selectedCategory != null) {
+        setState(() {
+          filteredBrandsList = brandsList.where((brand) {
+            final categories = brand['categories'] as List<dynamic>?;
+            return categories?.any((category) => category['id'] == selectedCategory['id']) ?? false;
+          }).toList();
+        });
+      }
+    }
+  }
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -102,7 +107,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       case 0:
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) =>  const HomeView()),
+          MaterialPageRoute(builder: (context) => const HomeView()),
         );
         break;
       case 1:
@@ -126,148 +131,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> loadUserData() async {
-    final user = await LocalStorageServices().getUser();
-    setState(() {
-      userData = user;
-    });
-  }
-
-
   void _updateIconStates() {
     _isMessageSelected = _selectedIndex == 2;
     _isAccountSelected = _selectedIndex == 3;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFEF7FF),
-        title: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Image.asset(
-                'assets/instore.png',
-                height: 50,
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ProfilScreen()),
-                  );
-                },
-                child:  CircleAvatar(
-                  radius: 20, // Ajustez la taille du cercle
-                  backgroundImage: userData!['image'] != null
-                      ? NetworkImage(userData!['image'])
-                      : const AssetImage('assets/user.png') as ImageProvider,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 10, left: 0, right: 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  _searchTextFormField(),
-                  const SizedBox(height: 10),
-                  _listViewCategory(),
-                  const SizedBox(height: 10),
-                ],
-              ),
-            ),
-            ImageListView(),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Other Content Below the List'),
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Other Content Below the List'),
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Other Content Below the List'),
-            ),
-            const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text('Other Content Below the List'),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: AnimatedBuilder(
-        animation: _animation,
-        builder: (context, child) {
-          return AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            transform: Matrix4.translationValues(
-                0.0, 50.0 * (1.0 - _animation.value), 0.0), // Move up and down
-            child: AnimatedOpacity(
-              opacity: _animation.value,
-              duration: const Duration(milliseconds: 50),
-              child: BottomAppBar(
-                height: 70,
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        icon: _selectedIndex == 0
-                            ? const FaIcon(FontAwesomeIcons.house, color: Color(0xFFFA058C),)
-                            : const FaIcon(FontAwesomeIcons.house,),
-                        onPressed: () {
-                          _onItemTapped(0);
-                        },
-                      ),
-                      IconButton(
-                        icon: _selectedIndex == 1
-                            ? const FaIcon(FontAwesomeIcons.bagShopping, color: Color(0xFFFA058C),)
-                            : const FaIcon(FontAwesomeIcons.bagShopping,),
-                        onPressed: () {
-                          _onItemTapped(1);
-                        },
-                      ),
-                      IconButton(
-                        icon: _selectedIndex == 2
-                            ?const FaIcon(FontAwesomeIcons.solidMessage, color: Color(0xFFFA058C),)
-                            : const FaIcon(FontAwesomeIcons.solidMessage),
-                        onPressed: () {
-                          _onItemTapped(2);
-                        },
-                      ),
-                      IconButton(
-                        icon: _selectedIndex == 3
-                            ?const FaIcon(FontAwesomeIcons.solidCircleUser, color: Color(0xFFFA058C),)
-                            : const FaIcon(FontAwesomeIcons.solidCircleUser),
-                        onPressed: () {
-                          _onItemTapped(3);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
   }
 
   Widget _searchTextFormField() {
@@ -300,29 +166,30 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     return SizedBox(
       height: 35,
       child: ListView.separated(
-        itemCount: names.length,
+        itemCount: categoriesList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           bool isSelected = index == _selectedCategoryIndex;
           return GestureDetector(
             onTap: () {
               setState(() {
-                _selectedCategoryIndex = index; // Update selected category
+                _selectedCategoryIndex = index;
               });
-              // Handle category selection logic here, e.g., filtering products
+              _filterBrandsByCategory();
             },
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: isSelected
                     ? const Color(0xFFFA058C)
-                    : const Color(
-                    0xFFffebf7), // Change color based on selection
+                    : const Color(0xFFffebf7),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Center(
                 child: Text(
-                  names[index],
+                  categoriesList.isNotEmpty
+                      ? categoriesList[index]['name']
+                      : "Loading...",
                   style: TextStyle(
                     color: isSelected
                         ? Colors.white
@@ -339,108 +206,171 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _gridViewProduct() {
-    return FutureBuilder(
-      future: instaController.getProducts(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData &&
-            snapshot.data != null &&
-            snapshot.data!.isNotEmpty) {
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: snapshot.data!.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Number of columns
-              mainAxisSpacing: 20.0,
-              crossAxisSpacing: 20.0,
-              childAspectRatio: 0.7, // Adjust height of the cards
-            ),
-            itemBuilder: (context, index) {
-              return GestureDetector(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFFEF7FF),
+        title: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                'assets/instore.png',
+                height: 50,
+              ),
+              GestureDetector(
                 onTap: () {
-                  Get.to(const Details(),
-                      arguments: {'id': snapshot.data![index].id});
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilScreen()),
+                  );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.grey.shade100,
-                  ),
-                  child: Column(
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: userData?['image'] != null
+                      ? NetworkImage(userData!['image'])
+                      : const AssetImage('assets/user.png') as ImageProvider,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 10, left: 0, right: 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _searchTextFormField(),
+                  const SizedBox(height: 10),
+                  _listViewCategory(),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+            ImageListView(filteredBrandsList: filteredBrandsList), // Updated parameter name
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Other Content Below the List'),
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Other Content Below the List'),
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Other Content Below the List'),
+            ),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text('Other Content Below the List'),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 100),
+            transform: Matrix4.translationValues(
+                0.0, 50.0 * (1.0 - _animation.value), 0.0),
+            child: AnimatedOpacity(
+              opacity: _animation.value,
+              duration: const Duration(milliseconds: 50),
+              child: BottomAppBar(
+                height: 70,
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.grey.shade100,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            snapshot.data![index].image,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      IconButton(
+                        icon: _selectedIndex == 0
+                            ? const FaIcon(
+                          FontAwesomeIcons.house,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.house),
+                        onPressed: () {
+                          _onItemTapped(0);
+                        },
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        snapshot.data![index].name,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      IconButton(
+                        icon: _selectedIndex == 1
+                            ? const FaIcon(
+                          FontAwesomeIcons.bagShopping,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.bagShopping),
+                        onPressed: () {
+                          _onItemTapped(1);
+                        },
                       ),
-                      const SizedBox(height: 5),
-                      Text(
-                        snapshot.data![index].priceSale.toString(),
-                        style: const TextStyle(color: Colors.pink),
+                      IconButton(
+                        icon: _selectedIndex == 2
+                            ? const FaIcon(
+                          FontAwesomeIcons.solidMessage,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.solidMessage),
+                        onPressed: () {
+                          _onItemTapped(2);
+                        },
+                      ),
+                      IconButton(
+                        icon: _selectedIndex == 3
+                            ? const FaIcon(
+                          FontAwesomeIcons.solidUser,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.solidUser),
+                        onPressed: () {
+                          _onItemTapped(3);
+                        },
                       ),
                     ],
                   ),
                 ),
-              );
-            },
+              ),
+            ),
           );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+        },
+      ),
     );
   }
-
-
-
 }
 
 class ImageListView extends StatefulWidget {
+  final List<dynamic> filteredBrandsList; // Renamed parameter
+
+  const ImageListView({super.key, required this.filteredBrandsList});
+
   @override
   _ImageListViewState createState() => _ImageListViewState();
 }
 
 class _ImageListViewState extends State<ImageListView> {
-  InstagrameurController instaController = Get.find<InstagrameurController>();
-  List<dynamic> brandsList = [];
-  int _currentPage = 0;
-  final int _itemsPerPage = 3;
+  List<dynamic> _displayedBrandsList = [];
   bool _isLoading = false;
   bool _hasMore = true;
-  bool _isFirstLoad = true;
+  int _currentPage = 1;
+  final int _itemsPerPage = 3;
 
   @override
   void initState() {
     super.initState();
-    _loadMoreItems();
-    getBrands();
-  }
-
-  Future<void> getBrands() async {
-    final res = await instaController.getBrands();
-    setState(() {
-      brandsList = res;
-      _hasMore = brandsList.length > _itemsPerPage;
-      _loadMoreItems();  // Load the first set of items once the data is fetched
-    });
+    _displayedBrandsList = widget.filteredBrandsList.take(_itemsPerPage).toList();
   }
 
   Future<void> _loadMoreItems() async {
@@ -448,104 +378,75 @@ class _ImageListViewState extends State<ImageListView> {
 
     setState(() {
       _isLoading = true;
-      _isFirstLoad = false;
     });
 
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 500)); // Simulate network delay
 
-    if (_currentPage * _itemsPerPage < brandsList.length) {
-      setState(() {
-        _currentPage++;
-        _isLoading = false;
-        _hasMore = _currentPage * _itemsPerPage < brandsList.length;
-      });
-    } else {
-      setState(() {
-        _isLoading = false;
-        _hasMore = false;
-      });
-    }
+    final nextPageItems = widget.filteredBrandsList
+        .skip(_itemsPerPage * _currentPage)
+        .take(_itemsPerPage)
+        .toList();
+
+    setState(() {
+      _currentPage++;
+      _displayedBrandsList.addAll(nextPageItems);
+      _isLoading = false;
+      if (nextPageItems.length < _itemsPerPage) {
+        _hasMore = false; // No more items to load
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    int itemCount = (_currentPage * _itemsPerPage).clamp(0, brandsList.length);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_isFirstLoad && !_isLoading)
-          Center(
-            child: ElevatedButton(
-              onPressed: _loadMoreItems,
-              child: const Text('Load More Brands'),
-            ),
-          ),
         ListView.builder(
-          shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: itemCount,
+          shrinkWrap: true,
+          itemCount: _displayedBrandsList.length,
           itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: ImageContainer(imageUrl: brandsList[index]['image']),
+            final brand = _displayedBrandsList[index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailScreen(brand: brand),
+                  ),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 5.0), // Space between images
+                child: Image.network(
+                  brand['image'] ?? 'https://via.placeholder.com/150',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+              ),
             );
           },
         ),
-        if (!_isFirstLoad && _hasMore && !_isLoading)
+        if (_hasMore)
           Center(
             child: ElevatedButton(
               onPressed: _loadMoreItems,
-              child: const Text('Load More Brands'),
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Load More Brands'),
             ),
-          ),
-        if (_isLoading)
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Center(child: CircularProgressIndicator()),
-          ),
-        if (!_hasMore && !_isLoading)
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Center(child: Text('No more items to load')),
           ),
       ],
     );
   }
 }
 
-class ImageContainer extends StatelessWidget {
-  final String imageUrl;
-
-  const ImageContainer({super.key, required this.imageUrl});
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DetailScreen(imageUrl: imageUrl)),
-        );
-      },
-      child: Container(
-        width: double.infinity,
-        height: 130,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imageUrl),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 
 class DetailScreen extends StatelessWidget {
-  final String imageUrl;
+  final dynamic brand;
 
-  const DetailScreen({super.key, required this.imageUrl});
+  const DetailScreen({super.key, required this.brand});
 
   @override
   Widget build(BuildContext context) {
@@ -554,26 +455,32 @@ class DetailScreen extends StatelessWidget {
         title: const Text('Product Details'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Image.network(imageUrl),
+            child: Image.network(
+              brand['image'] ?? 'https://via.placeholder.com/150',
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Product Name',
+                  brand['name'] ?? 'Product Name',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8.0),
                 Text(
-                  'Product Price',
+                  brand['price'] ?? 'Product Price',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 8.0),
-                const Text(
-                  'Product Description',
+                Text(
+                  brand['description'] ?? 'Product Description',
                   textAlign: TextAlign.justify,
                 ),
               ],
@@ -584,6 +491,4 @@ class DetailScreen extends StatelessWidget {
     );
   }
 }
-
-
 
