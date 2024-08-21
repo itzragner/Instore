@@ -142,7 +142,7 @@ class LoginInstaScreen extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    Get.to(() => const SignUpInstaScreen());
+                    Get.off(() => const SignUpInstaScreen());
                   },
                   child: const Text(
                     'Créer un compte',

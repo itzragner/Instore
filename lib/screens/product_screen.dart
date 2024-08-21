@@ -42,6 +42,34 @@ class _InstagramProduitState extends State<InstagramProduit>
   late FocusNode _searchFocusNode;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  bool _isMessageSelected = false;
+  bool _isAccountSelected = false;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _updateIconStates();
+    });
+    switch (index) {
+      case 0:
+        Get.offNamed('/home');
+        break;
+      case 1:
+        Get.offNamed('/product');
+        break;
+      case 2:
+        Get.offNamed('/messages');
+        break;
+      case 3:
+        Get.offNamed('/profile');
+        break;
+    }
+  }
+
+  void _updateIconStates() {
+    _isMessageSelected = _selectedIndex == 2;
+    _isAccountSelected = _selectedIndex == 3;
+  }
 
   @override
   void initState() {
@@ -138,47 +166,12 @@ class _InstagramProduitState extends State<InstagramProduit>
     });
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      _updateIconStates();
-    });
-    // Ajouter votre logique de navigation ici
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) =>  home.HomeView()),
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const InstagramProduit()),
-        );
-        break;
-      case 2:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MessageScreen()),
-        );
-        break;
-      case 3:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ProfilScreen()),
-        );
-        break;
-    }
-  }
-
   Future<void> loadUserData() async {
     final user = await LocalStorageServices().getUser();
     setState(() {
       userData = user;
     });
   }
-  void _updateIconStates() {}
 
   @override
   Widget build(BuildContext context) {
@@ -196,14 +189,11 @@ class _InstagramProduitState extends State<InstagramProduit>
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ProfilScreen()),
-                  );
+                  Get.offNamed('/profile');
                 },
-                child:  CircleAvatar(
-                  radius: 20, // Ajustez la taille du cercle
-                  backgroundImage: userData!['image'] != null
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: userData?['image'] != null
                       ? NetworkImage(userData!['image'])
                       : const AssetImage('assets/user.png') as ImageProvider,
                 ),
@@ -215,28 +205,25 @@ class _InstagramProduitState extends State<InstagramProduit>
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-        child: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Container(
-                padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-                child: Column(
-                  children: [
-                    _searchTextFormField(),
-                    const SizedBox(height: 20),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Mes Produits',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    _gridViewProducts(),
-                  ],
+          child: Column(
+            children: [
+              _searchTextFormField(),
+              const SizedBox(height: 20),
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Mes Produits',
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-      ),
+              const SizedBox(height: 20),
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _gridViewProducts(),
+            ],
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -320,13 +307,20 @@ class _InstagramProduitState extends State<InstagramProduit>
         borderRadius: BorderRadius.circular(20),
         color: Colors.grey.shade200,
       ),
-      child: TextFormField(
-        focusNode: _searchFocusNode,
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.black,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: TextFormField(
+          focusNode: _searchFocusNode,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            prefixIcon: Icon(
+              Icons.search,
+              color: Color(0xFFBBBBBB),
+            ),
+            hintText: 'Rechercher sur Instore',
+            hintStyle: TextStyle(color: Color(0xFFBBBBBB)),
+            contentPadding:
+            EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           ),
         ),
       ),

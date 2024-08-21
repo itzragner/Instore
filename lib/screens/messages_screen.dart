@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'product_screen.dart';
 import 'home_screen.dart' as home;
 import 'profil_screen.dart';
@@ -15,6 +16,8 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
   int _selectedIndex = 2;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  bool _isMessageSelected = false;
+  bool _isAccountSelected = false;
 
   @override
   void initState() {
@@ -37,37 +40,29 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
   }
 
   void _onItemTapped(int index) {
-    if (_selectedIndex != index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-      switch (index) {
-        case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) =>  home.HomeView()),
-          );
-          break;
-        case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const InstagramProduit()),
-          );
-          break;
-        case 2:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MessageScreen()),
-          );
-          break;
-        case 3:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfilScreen()),
-          );
-          break;
-      }
+    setState(() {
+      _selectedIndex = index;
+      _updateIconStates();
+    });
+    switch (index) {
+      case 0:
+        Get.offNamed('/home');
+        break;
+      case 1:
+        Get.offNamed('/product');
+        break;
+      case 2:
+        Get.offNamed('/messages');
+        break;
+      case 3:
+        Get.offNamed('/profile');
+        break;
     }
+  }
+
+  void _updateIconStates() {
+    _isMessageSelected = _selectedIndex == 2;
+    _isAccountSelected = _selectedIndex == 3;
   }
 
   @override
@@ -98,7 +93,7 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
           return AnimatedContainer(
             duration: const Duration(milliseconds: 100),
             transform: Matrix4.translationValues(
-                0.0, 50.0 * (1.0 - _animation.value), 0.0), // Move up and down
+                0.0, 50.0 * (1.0 - _animation.value), 0.0),
             child: AnimatedOpacity(
               opacity: _animation.value,
               duration: const Duration(milliseconds: 50),
@@ -110,23 +105,32 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
                     children: [
                       IconButton(
                         icon: _selectedIndex == 0
-                            ? const FaIcon(FontAwesomeIcons.house, color: Color(0xFFFA058C),)
-                            : const FaIcon(FontAwesomeIcons.house,),
+                            ? const FaIcon(
+                          FontAwesomeIcons.house,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.house),
                         onPressed: () {
                           _onItemTapped(0);
                         },
                       ),
                       IconButton(
                         icon: _selectedIndex == 1
-                            ? const FaIcon(FontAwesomeIcons.bagShopping, color: Color(0xFFFA058C),)
-                            : const FaIcon(FontAwesomeIcons.bagShopping,),
+                            ? const FaIcon(
+                          FontAwesomeIcons.bagShopping,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.bagShopping),
                         onPressed: () {
                           _onItemTapped(1);
                         },
                       ),
                       IconButton(
                         icon: _selectedIndex == 2
-                            ?const FaIcon(FontAwesomeIcons.solidMessage, color: Color(0xFFFA058C),)
+                            ? const FaIcon(
+                          FontAwesomeIcons.solidMessage,
+                          color: Color(0xFFFA058C),
+                        )
                             : const FaIcon(FontAwesomeIcons.solidMessage),
                         onPressed: () {
                           _onItemTapped(2);
@@ -134,7 +138,10 @@ class _MessageScreenState extends State<MessageScreen> with SingleTickerProvider
                       ),
                       IconButton(
                         icon: _selectedIndex == 3
-                            ?const FaIcon(FontAwesomeIcons.solidCircleUser, color: Color(0xFFFA058C),)
+                            ? const FaIcon(
+                          FontAwesomeIcons.solidCircleUser,
+                          color: Color(0xFFFA058C),
+                        )
                             : const FaIcon(FontAwesomeIcons.solidCircleUser),
                         onPressed: () {
                           _onItemTapped(3);

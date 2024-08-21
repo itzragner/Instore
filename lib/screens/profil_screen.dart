@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:instore/screens/donnes_screen.dart';
 import '../services/auth.dart';
 import 'product_screen.dart';
 import 'messages_screen.dart';
@@ -15,16 +16,15 @@ class ProfilScreen extends StatefulWidget {
   State<ProfilScreen> createState() => _ProfilScreenState();
 }
 
-class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderStateMixin {
-
-
+class _ProfilScreenState extends State<ProfilScreen>  with SingleTickerProviderStateMixin {
   int _selectedIndex = 3;
   late AnimationController _animationController;
   late Animation<double> _animation;
+  bool _isMessageSelected = false;
+  bool _isAccountSelected = false;
 
   //userdata
   Map<String, dynamic>? userData;
-
 
   @override
   void initState() {
@@ -56,49 +56,64 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
   }
 
   void _onItemTapped(int index) {
-    if (_selectedIndex != index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-      switch (index) {
-        case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) =>  HomeView()),
-          );
-          break;
-        case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const InstagramProduit()),
-          );
-          break;
-        case 2:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const MessageScreen()),
-          );
-          break;
-        case 3:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfilScreen()),
-          );
-          break;
-      }
+    setState(() {
+      _selectedIndex = index;
+      _updateIconStates();
+    });
+    switch (index) {
+      case 0:
+        Get.offNamed('/home');
+        break;
+      case 1:
+        Get.offNamed('/product');
+        break;
+      case 2:
+        Get.offNamed('/messages');
+        break;
+      case 3:
+        Get.offNamed('/profile');
+        break;
     }
+  }
+
+  void _updateIconStates() {
+    _isMessageSelected = _selectedIndex == 2;
+    _isAccountSelected = _selectedIndex == 3;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Account'),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0), // Add left and right padding
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Mon Compte',
+                  style: TextStyle(
+                    fontSize: 29,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Image.asset(
+                  'assets/instore.png', // Path to your logo image
+                  height: 80,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.04,
+          ),
+          //update prfile picture
           GestureDetector(
             onTap: () async {
               final selectedImage = await selectAndUploadImage();
@@ -108,7 +123,7 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
             },
             child: Stack(
               children: [
-                 CircleAvatar(
+                CircleAvatar(
                   radius: 100,
                   backgroundImage: userData!['image'] != null
                       ? NetworkImage(userData!['image'])
@@ -119,27 +134,31 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
                   right: 0,
                   child: Image.asset(
                     'assets/Iconcam.png', // Path to your camera icon
-
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Text(
             userData!['name'],
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
-          const Text(
-            'Hana.Slouma@gmail.com',
-            style: TextStyle(fontSize: 18),
+          Text(
+            userData!['email'],
+            style: const TextStyle(fontSize: 18),
           ),
-          const SizedBox(height: 40),
+
+           SizedBox(
+            height: MediaQuery.of(context).size.height * 0.04,
+          ),
           VerticalButton(
             title: 'Données personnelles profil',
             onPressed: () {
-              // Action à effectuer lors du clic sur ce bouton
+              Get.toNamed('/Donnes');
             },
           ),
           VerticalButton(
@@ -177,7 +196,7 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
           return AnimatedContainer(
             duration: const Duration(milliseconds: 100),
             transform: Matrix4.translationValues(
-                0.0, 50.0 * (1.0 - _animation.value), 0.0), // Move up and down
+                0.0, 50.0 * (1.0 - _animation.value), 0.0),
             child: AnimatedOpacity(
               opacity: _animation.value,
               duration: const Duration(milliseconds: 50),
@@ -190,12 +209,10 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
                       IconButton(
                         icon: _selectedIndex == 0
                             ? const FaIcon(
-                                FontAwesomeIcons.house,
-                                color: Color(0xFFFA058C),
-                              )
-                            : const FaIcon(
-                                FontAwesomeIcons.house,
-                              ),
+                          FontAwesomeIcons.house,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.house),
                         onPressed: () {
                           _onItemTapped(0);
                         },
@@ -203,12 +220,10 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
                       IconButton(
                         icon: _selectedIndex == 1
                             ? const FaIcon(
-                                FontAwesomeIcons.bagShopping,
-                                color: Color(0xFFFA058C),
-                              )
-                            : const FaIcon(
-                                FontAwesomeIcons.bagShopping,
-                              ),
+                          FontAwesomeIcons.bagShopping,
+                          color: Color(0xFFFA058C),
+                        )
+                            : const FaIcon(FontAwesomeIcons.bagShopping),
                         onPressed: () {
                           _onItemTapped(1);
                         },
@@ -216,9 +231,9 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
                       IconButton(
                         icon: _selectedIndex == 2
                             ? const FaIcon(
-                                FontAwesomeIcons.solidMessage,
-                                color: Color(0xFFFA058C),
-                              )
+                          FontAwesomeIcons.solidMessage,
+                          color: Color(0xFFFA058C),
+                        )
                             : const FaIcon(FontAwesomeIcons.solidMessage),
                         onPressed: () {
                           _onItemTapped(2);
@@ -227,9 +242,9 @@ class _ProfilScreenState extends State<ProfilScreen> with SingleTickerProviderSt
                       IconButton(
                         icon: _selectedIndex == 3
                             ? const FaIcon(
-                                FontAwesomeIcons.solidCircleUser,
-                                color: Color(0xFFFA058C),
-                              )
+                          FontAwesomeIcons.solidCircleUser,
+                          color: Color(0xFFFA058C),
+                        )
                             : const FaIcon(FontAwesomeIcons.solidCircleUser),
                         onPressed: () {
                           _onItemTapped(3);

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:instore/components/details_sreen.dart';
 import 'package:instore/services/instagrameur.dart';
 import 'package:instore/components/details.dart';
+import 'package:instore/routes.dart';
 
 import '../services/local_storage.dart';
 import 'messages_screen.dart';
 import 'product_screen.dart';
 import 'profil_screen.dart';
 
-class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+class HomeView2 extends StatefulWidget {
+  const HomeView2({super.key});
 
   @override
-  State<HomeView> createState() => _HomeViewState();
+  State<HomeView2> createState() => _HomeView2State();
 }
 
-class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
+class _HomeView2State extends State<HomeView2> with TickerProviderStateMixin {
   InstagrameurController instaController = Get.find<InstagrameurController>();
   int _selectedCategoryIndex = 0;
   List<dynamic> categoriesList = [];
@@ -69,11 +69,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Future<void> getCategories() async {
     final res = await instaController.getCategories();
     setState(() {
-      categoriesList = [{'id': null, 'name': 'All'}]; // Add "All" category
-      categoriesList.addAll(res); // Add the rest of the categories
+      categoriesList = res;
     });
   }
-
 
   Future<void> getBrands() async {
     final res = await instaController.getBrands();
@@ -87,11 +85,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     if (_selectedCategoryIndex < categoriesList.length) {
       final selectedCategory = categoriesList[_selectedCategoryIndex];
 
-      if (selectedCategory['id'] == null) {
-        setState(() {
-          filteredBrandsList = brandsList;
-        });
-      } else if (selectedCategory != null) {
+      if (selectedCategory != null) {
         setState(() {
           filteredBrandsList = brandsList.where((brand) {
             final categories = brand['categories'] as List<dynamic>?;
@@ -180,7 +174,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Center(
                 child: Text(
-                  categoriesList[index]['name'] ?? "Loading...",
+                  categoriesList.isNotEmpty
+                      ? categoriesList[index]['name']
+                      : "Loading...",
                   style: TextStyle(
                     color: isSelected
                         ? Colors.white
@@ -212,9 +208,9 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                 height: 50,
               ),
               GestureDetector(
-                  onTap: () {
-                    Get.offNamed('/profile');
-                  },
+                onTap: () {
+                  Get.offNamed('/profile');
+                },
                 child: CircleAvatar(
                   radius: 20,
                   backgroundImage: userData?['image'] != null
@@ -242,7 +238,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            ImageListView(filteredBrandsList: filteredBrandsList), // Updated parameter name
+            ImageListView(filteredBrandsList: filteredBrandsList),
             const SizedBox(height: 20),
             const Padding(
               padding: EdgeInsets.all(16.0),
@@ -338,94 +334,38 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   }
 }
 
-class ImageListView extends StatefulWidget {
-  final List<dynamic> filteredBrandsList; // Renamed parameter
+class ImageListView extends StatelessWidget {
+  final List<dynamic> filteredBrandsList;
 
   const ImageListView({super.key, required this.filteredBrandsList});
 
   @override
-  _ImageListViewState createState() => _ImageListViewState();
-}
-
-class _ImageListViewState extends State<ImageListView> {
-  List<dynamic> _displayedBrandsList = [];
-  bool _isLoading = false;
-  bool _hasMore = true;
-  int _currentPage = 1;
-  final int _itemsPerPage = 3;
-
-  @override
-  void initState() {
-    super.initState();
-      _displayedBrandsList = widget.filteredBrandsList.take(_itemsPerPage).toList();
-      print("display, $_displayedBrandsList ");
-    }
-
-  Future<void> _loadMoreItems() async {
-    if (_isLoading || !_hasMore) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    await Future.delayed(const Duration(milliseconds: 500)); // Simulate network delay
-
-    final nextPageItems = widget.filteredBrandsList
-        .skip(_itemsPerPage * _currentPage)
-        .take(_itemsPerPage)
-        .toList();
-
-    setState(() {
-      _currentPage++;
-      _displayedBrandsList.addAll(nextPageItems);
-      _isLoading = false;
-      if (nextPageItems.length < _itemsPerPage) {
-        _hasMore = false; // No more items to load
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: _displayedBrandsList.length,
-          itemBuilder: (context, index) {
-            final brand = _displayedBrandsList[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailScreen(brand: brand),
-                  ),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 5.0), // Space between images
-                child: Image.network(
-                  brand['image'] ?? 'https://via.placeholder.com/150',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: filteredBrandsList.length,
+      itemBuilder: (context, index) {
+        final brand = filteredBrandsList[index];
+        return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailScreen(brand: brand),
                 ),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 5.0), // Space between images
+              child: Image.network(
+                brand['image'] ?? 'https://via.placeholder.com/150',
+                fit: BoxFit.cover,
+                width: double.infinity,
               ),
-            );
-          },
-        ),
-        if (_hasMore)
-          Center(
-            child: ElevatedButton(
-              onPressed: _loadMoreItems,
-              child: _isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text('Load More Brands'),
-            ),
-          ),
-      ],
+            )
+        );
+      },
     );
   }
 }
@@ -443,32 +383,26 @@ class DetailScreen extends StatelessWidget {
         title: const Text('Product Details'),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Image.network(
-              brand['image'] ?? 'https://via.placeholder.com/150',
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
+            child: Image.network(brand['image']),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  brand['name'] ?? 'Product Name',
+                  'Product Name',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8.0),
                 Text(
-                  brand['price'] ?? 'Product Price',
+                  'Product Price',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 8.0),
-                Text(
-                  brand['description'] ?? 'Product Description',
+                const Text(
+                  'Product Description',
                   textAlign: TextAlign.justify,
                 ),
               ],
@@ -479,4 +413,3 @@ class DetailScreen extends StatelessWidget {
     );
   }
 }
-

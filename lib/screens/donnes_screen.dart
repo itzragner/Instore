@@ -8,30 +8,30 @@ import 'package:instore/screens/login_instascreen.dart';
 import 'package:instore/widgets/image_picker.dart';
 import '../components/controllers/Auth_controller.dart';
 
-class SignUpInstaScreen extends StatefulWidget {
-  const SignUpInstaScreen({super.key});
+class DonnesScreen extends StatefulWidget {
+  const DonnesScreen({super.key});
 
   @override
-  _SignUpInstaScreenState createState() => _SignUpInstaScreenState();
+  _DonnesScreenState createState() => _DonnesScreenState();
 }
 
-class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
+class _DonnesScreenState extends State<DonnesScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
 
   final TextEditingController _nomInstagrammeurController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _numeroTelephoneController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _matriculeFiscaleController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _lienInstagramController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _motDePasseController = TextEditingController();
   final TextEditingController _confirmMotDePasseController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _postCodeController = TextEditingController();
@@ -76,15 +76,15 @@ class _SignUpInstaScreenState extends State<SignUpInstaScreen> {
 
 // ...
 
-Future<void> _selectAndUploadImage() async {
-  final selectedImage = await selectAndUploadImage();
+  Future<void> _selectAndUploadImage() async {
+    final selectedImage = await selectAndUploadImage();
 
-  if (selectedImage != null) {
-    setState(() {
-      _image = selectedImage;
-    });
+    if (selectedImage != null) {
+      setState(() {
+        _image = selectedImage;
+      });
+    }
   }
-}
 
   Future<void> _registerAccountWithImage() async {
     if (_formKey.currentState!.validate()) {
@@ -125,20 +125,12 @@ Future<void> _selectAndUploadImage() async {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Créer un compte',
+          'Mes Données',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_a_photo),
-            onPressed: () {
-              _selectAndUploadImage();
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -189,7 +181,7 @@ Future<void> _selectAndUploadImage() async {
                     return 'Veuillez entrer votre adresse email';
                   }
                   if (!RegExp(
-                          r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
+                      r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
                       .hasMatch(value)) {
                     return 'Veuillez entrer une adresse email valide';
                   }
@@ -253,54 +245,12 @@ Future<void> _selectAndUploadImage() async {
                   ),
                 ],
               ),
-              const SizedBox(height: 10.0),
-              CustomTextField(
-                controller: _motDePasseController,
-                labelText: 'Mot de passe',
-                obscureText: obscurePassword,
-                suffixIcon: IconButton(
-                  onPressed: togglePasswordVisibility,
-                  icon: Icon(obscurePassword
-                      ? Icons.visibility
-                      : Icons.visibility_off),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Veuillez entrer un mot de passe';
-                  }
-                  if (value.length < 6) {
-                    return 'Le mot de passe doit avoir au moins 6 caractères';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 10.0),
-              CustomTextField(
-                controller: _confirmMotDePasseController,
-                labelText: 'Confirmer le mot de passe',
-                obscureText: obscureConfirmPassword,
-                suffixIcon: IconButton(
-                  onPressed: toggleConfirmPasswordVisibility,
-                  icon: Icon(obscureConfirmPassword
-                      ? Icons.visibility
-                      : Icons.visibility_off),
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Veuillez confirmer votre mot de passe';
-                  }
-                  if (value != _motDePasseController.text) {
-                    return 'Les mots de passe ne correspondent pas';
-                  }
-                  return null;
-                },
-              ),
+             
               const SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () {
-                  _registerAccountWithImage();
                 },
-                child: const Text('Créer le compte'),
+                child: const Text('Enregistrer'),
               ),
             ],
           ),
@@ -371,6 +321,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
 void main() {
   runApp(const MaterialApp(
-    home: SignUpInstaScreen(),
+    home: DonnesScreen(),
   ));
 }
