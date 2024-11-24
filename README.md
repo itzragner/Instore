@@ -1,16 +1,28 @@
-# instore
+# Instore 
 
-A new Flutter project.
+## Installation
 
-## Getting Started
+To get started with the Instore app, follow the steps below:
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- Install **Flutter**: [Flutter installation guide](https://flutter.dev/docs/get-started/install).
+- Set up your **IDE** (VS Code, Android Studio, etc.), with the Flutter and Dart plugins.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Clone the Repository
+```bash
+git clone https://github.com/itzragner/Instore.git
+```
+###  Install Dependencies
+Run the following command to install the necessary dependencies:
+```bash
+flutter pub get
+```
+### Run the App
+To run the app on an emulator or connected device:
+```bash
+flutter run
+```
+## Features
+- **Flutter Framework**: Leverages Flutter for cross-platform mobile app development.
+- **Secure Storage**: Utilizes the `flutter_secure_storage` package for securely storing sensitive information.
+- **Cross-Platform Support**: The template is set up to build apps that can run on Android, iOS, web, and desktop.
