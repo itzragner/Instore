@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instore/screens/login_instascreen.dart';
+import 'package:instore/screens/Auth/login_instascreen.dart';
 import 'package:instore/widgets/image_picker.dart';
-import '../components/controllers/Auth_controller.dart';
+import '../../components/controllers/Auth_controller.dart';
 
 class SignUpInstaScreen extends StatefulWidget {
   const SignUpInstaScreen({super.key});

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:instore/screens/login_instascreen.dart';
+import 'package:instore/screens/Auth/login_instascreen.dart';
 import 'package:instore/widgets/image_picker.dart';
 import '../components/controllers/Auth_controller.dart';
 
@@ -73,52 +73,6 @@ class _DonnesScreenState extends State<DonnesScreen> {
   }
 
 
-
-// ...
-
-  Future<void> _selectAndUploadImage() async {
-    final selectedImage = await selectAndUploadImage();
-
-    if (selectedImage != null) {
-      setState(() {
-        _image = selectedImage;
-      });
-    }
-  }
-
-  Future<void> _registerAccountWithImage() async {
-    if (_formKey.currentState!.validate()) {
-      Map<String, dynamic> payload = {
-        "name": _nomInstagrammeurController.text,
-        "phone": _numeroTelephoneController.text,
-        "email": _emailController.text,
-        "password": _motDePasseController.text,
-        "role": 'provider-intern',
-        "acountLink": _lienInstagramController.text,
-        "street": _streetController.text,
-        "city": _cityController.text,
-        "post_code": _postCodeController.text,
-        "CIN": _cinController.text,
-        "taxNumber": _matriculeFiscaleController.text,
-        "companyName": _companyNameController.text,
-        "companyUnderConstruction": _companyUnderConstruction ? 1 : 0,
-      };
-      _signUpController
-          .registerAccountWithJson(payload, _image)
-          .then((response) {
-        Get.snackbar("success", "register with success",
-            colorText: Colors.green[600]);
-        Get.off(() => LoginInstaScreen());
-      }).catchError((error) {
-        print('Erreur lors de la création du compte: $error');
-      });
-    } else {
-      Get.snackbar("warn !",
-          "Impossible de créer le compte. Veuillez remplir tous les champs.",
-          colorText: Colors.red[600]);
-      print('Erreur: ');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

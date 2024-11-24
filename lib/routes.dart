@@ -7,9 +7,9 @@ import 'package:instore/screens/home_screen2.dart';
 import 'package:instore/screens/messages_screen.dart';
 import 'package:instore/screens/product_screen.dart';
 import 'package:instore/screens/profil_screen.dart';
-import 'package:instore/screens/splash_screen.dart';
-import 'package:instore/screens/login_instascreen.dart';
-import 'package:instore/screens/sign_upinstascreen.dart';
+import 'package:instore/screens/Auth/splash_screen.dart';
+import 'package:instore/screens/Auth/login_instascreen.dart';
+import 'package:instore/screens/Auth/sign_upinstascreen.dart';
 
 
 List<GetPage<dynamic>> routes=[
@@ -36,7 +36,8 @@ List<GetPage<dynamic>> routes=[
     page: () => const HomeView(),
     transition: Transition.rightToLeft,
     transitionDuration: const Duration(milliseconds: 500),
-  ),GetPage(
+  ),
+  GetPage(
     name: '/home2',
     page: () => const HomeView2(),
     transition: Transition.rightToLeft,

@@ -6,7 +6,7 @@ import 'package:instore/services/instagrameur.dart';
 import 'package:instore/components/details.dart';
 import 'package:instore/services/global.dart';
 
-import '../add_product_screen.dart';
+import 'add_product_screen.dart';
 import 'home_screen.dart' as home;
 import 'messages_screen.dart';
 import 'profil_screen.dart';

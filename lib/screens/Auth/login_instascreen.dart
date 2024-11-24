@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:instore/components/controllers/auth_controller.dart';
+import 'package:instore/controllers/auth_controller.dart';
 import 'package:instore/services/global.dart';
-import '../components/mdp1.dart';
+import '../../components/mdp1.dart';
 import 'sign_upinstascreen.dart';
 
 class LoginInstaScreen extends StatelessWidget {

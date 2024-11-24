@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:instore/screens/login_instascreen.dart';
+import 'package:instore/screens/Auth/login_instascreen.dart';
 // import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 // import 'package:saverapp/Screens/login.dart';

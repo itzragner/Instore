@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instore/services/local_storage.dart';
 
-const String localhost = "192.168.100.19";
+const String localhost = "stage.webify.pro";
+// https://stage.webify.pro/api/register
+const String baseURL = "https://stage.webify.pro/api/";
 
-const String baseURL = "http://$localhost:8000/api/";
 const String frontOfiiceUrl = "http://localhost:4200/details/";
 final token = controller.token;
 Map<String, String> headers = {
