@@ -383,26 +383,32 @@ class DetailScreen extends StatelessWidget {
         title: const Text('Product Details'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Image.network(brand['image']),
+            child: Image.network(
+              brand['image'] ?? 'https://via.placeholder.com/150',
+              fit: BoxFit.cover,
+              width: double.infinity,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Product Name',
+                  brand['name'] ?? 'Product Name',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8.0),
                 Text(
-                  'Product Price',
+                  brand['price'] ?? 'Product Price',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 8.0),
-                const Text(
-                  'Product Description',
+                Text(
+                  brand['description'] ?? 'Product Description',
                   textAlign: TextAlign.justify,
                 ),
               ],

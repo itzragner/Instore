@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:instore/screens/home_screen.dart';
+import 'package:instore/screens/home_screen2.dart';
 import 'package:instore/services/auth.dart';
 import 'package:instore/services/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -154,7 +155,7 @@ class AuthController {
           _save(accessToken, user);
           isLoading.value = false;
           errorMessage.value = '';
-          Get.off(() =>  const HomeView());
+          Get.off(() =>  const HomeView2());
         } else {
           Get.snackbar("warn", "Your account is not active",
               backgroundColor: Colors.orange[300]);
